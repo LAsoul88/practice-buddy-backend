@@ -1,19 +1,7 @@
-import { Schema } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 const ObjectId = Schema.ObjectId
 
-const JournalEntry = new Schema({
-  user: ObjectId,
-  entry: { 
-    type: String, 
-    required: true 
-  },
-  date: { 
-    type: Date, 
-    default: Date.now 
-  }
-})
-
-const User = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -28,7 +16,23 @@ const User = new Schema({
   },
 })
 
-module.exports = {
-  JournalEntry,
-  User
+const User = mongoose.model('users', userSchema)
+
+const entrySchema = new Schema({
+  user: ObjectId,
+  entry: { 
+    type: String, 
+    required: true 
+  },
+  date: { 
+    type: Date, 
+    default: Date.now 
+  }
+})
+
+const Entry = mongoose.model('entries', entrySchema)
+
+export {
+  User,
+  Entry
 }
