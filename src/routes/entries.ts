@@ -3,6 +3,6 @@ import controllers from '../controllers'
 
 const router = express.Router()
 
-router.get('/entries', controllers.entries.entriesByUser)
+router.get('/', controllers.entries.entriesByUser)
 
 export default router

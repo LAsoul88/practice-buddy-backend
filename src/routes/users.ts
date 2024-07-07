@@ -3,6 +3,8 @@ import controllers from '../controllers'
 
 const router = express.Router()
 
-router.get('/users', controllers.users.userById)
+router.get('/', controllers.users.getUsers)
+router.get('/:id', controllers.users.userById)
+router.post('/', controllers.users.createUser)
 
 export default router
