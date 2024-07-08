@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import './db/connection'
-import routes from './routes'
+import routes from './router'
 import { generateRoutes } from './helpers/generateRoutes'
 
 dotenv.config()
