@@ -1,9 +1,9 @@
 import users from './users'
 import entries from './entries'
-import login from './login'
+import auth from './auth'
 
 export default {
   users,
   entries,
-  login
+  auth
 }

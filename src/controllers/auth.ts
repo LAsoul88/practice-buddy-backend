@@ -17,6 +17,19 @@ const login = async (req: Request, res: Response) => {
   }
 }
 
+const register = async (req: Request, res: Response) => {
+  try {
+    const body = await req.body
+    const user = await User.create({
+      ...body
+    })
+    return res.send(user)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default {
-  login
+  login,
+  register
 }

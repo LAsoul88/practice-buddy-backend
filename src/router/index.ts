@@ -1,11 +1,11 @@
 import users from './users'
 import entries from './entries'
-import login from './login'
+import auth from './auth'
 
 const routesPathMap = {
   '/users': users,
   '/entries': entries,
-  '/login': login
+  '/auth': auth
 }
 
 export default routesPathMap
