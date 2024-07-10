@@ -21,7 +21,7 @@ const User = mongoose.model('users', userSchema)
 
 const entrySchema = new Schema({
   user: ObjectId,
-  entry: { 
+  text: { 
     type: String, 
     required: true 
   },
