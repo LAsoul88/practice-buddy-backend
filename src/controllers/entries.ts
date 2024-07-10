@@ -12,6 +12,20 @@ const entriesByUser = async (req: Request, res: Response) => {
   }
 }
 
+const createEntry = async (req: Request, res: Response) => {
+  try {
+    const body = await req.body
+    console.log(body)
+    const entry = await Entry.create({
+      ...body
+    })
+    return res.send(entry)
+  } catch (error) {
+  console.log(error)
+ }
+}
+
 export default {
-  entriesByUser
+  entriesByUser,
+  createEntry
 }
