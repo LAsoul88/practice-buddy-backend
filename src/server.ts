@@ -13,6 +13,10 @@ const port = process.env.PORT || 3001
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use((req, res, next) => {
+  console.log(req.url)
+  next()
+})
 
 generateRoutes(routes, app)
 

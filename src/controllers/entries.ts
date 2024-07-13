@@ -15,11 +15,11 @@ const entriesByUser = async (req: Request, res: Response) => {
 const createEntry = async (req: Request, res: Response) => {
   try {
     const body = await req.body
-    console.log(body)
     const entry = await Entry.create({
       ...body
     })
-    return res.send(entry)
+    const entries = await Entry.find({})
+    return res.send(entries)
   } catch (error) {
   console.log(error)
  }
