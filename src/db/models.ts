@@ -2,10 +2,6 @@ import mongoose, { Schema } from 'mongoose'
 const ObjectId = Schema.ObjectId
 
 const userSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
   password: {
     type: String,
     required: true
