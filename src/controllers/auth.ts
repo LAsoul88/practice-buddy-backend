@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
 import { User } from '../db/models'
+import bcrypt from 'bcrypt'
 
 const login = async (req: Request, res: Response) => {
   try {
-    const body = req.body
+    const body = await req.body
     const { email, password } = body
 
     const user = await User.findOne({
@@ -19,9 +20,14 @@ const login = async (req: Request, res: Response) => {
 
 const register = async (req: Request, res: Response) => {
   try {
-    const body = await req.body
+    const { email, username, password } = await req.body
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+
     const user = await User.create({
-      ...body
+      email,
+      username,
+      password: hashedPassword
     })
     return res.send(user)
   } catch (error) {
