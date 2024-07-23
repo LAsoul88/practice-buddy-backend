@@ -32,8 +32,19 @@ const createUser = async (req: Request, res: Response) => {
   }
 }
 
+const deleteUsers = async (req: Request, res: Response) => {
+  try {
+    const deletedUsers = await User.deleteMany({})
+    console.log(deletedUsers)
+    return res.status(204)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default { 
   getUsers,
   userById,
-  createUser
+  createUser,
+  deleteUsers
 }
