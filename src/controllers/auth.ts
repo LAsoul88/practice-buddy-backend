@@ -5,14 +5,19 @@ import bcrypt from 'bcrypt'
 const login = async (req: Request, res: Response) => {
   try {
     const body = await req.body
-    const { email, password } = body
+    const { user, password } = body
 
-    const user = await User.findOne({
-      email: email
+    const foundUser = await User.findOne({
+      $or: [
+        { email: user },
+        { username: user }
+      ]
     })
-    
-    if (user?.password !== password) return res.send({ error: 'Password does not match' })
-    else return res.send({ user, status: 200 })
+    if (!foundUser) return res.send({ error: 'Username or email not found.' })
+
+    const passDoesMatch = await bcrypt.compare(password, foundUser.password)
+    if (!passDoesMatch) return res.send({ error: 'Password is incorrect.' })
+    else return res.send({ user: foundUser, status: 200 })
   } catch (error) {
     console.log(error)
   }
