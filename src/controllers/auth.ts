@@ -20,7 +20,10 @@ const login = async (req: Request, res: Response) => {
     if (!passDoesMatch) return res.send({ error: 'Password is incorrect.' })
     else {
       const token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
-      return res.send({ user: foundUser, token, status: 200 })
+      res.cookie('token', token, {
+        httpOnly: true
+      })
+      return res.status(200).send({ user: foundUser, redirect: `http://localhost:3000/journal` })
     }
   } catch (error) {
     console.log(error)
