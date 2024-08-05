@@ -23,7 +23,7 @@ const login = async (req: Request, res: Response) => {
       res.cookie('token', token, {
         httpOnly: true
       })
-      return res.status(200).send({ user: foundUser, redirect: `http://localhost:3000/journal` })
+      return res.status(200).send({ user: foundUser, redirect: `http://localhost:3000/journal/${foundUser._id}` })
     }
   } catch (error) {
     console.log(error)
