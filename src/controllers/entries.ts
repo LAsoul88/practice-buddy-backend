@@ -4,7 +4,7 @@ import { Entry } from '../db/models'
 const entriesByUser = async (req: Request, res: Response) => {
   try {
     const entries = await Entry.find({
-      user: req.params.user
+      user: req.params.id
     })
     return res.send(entries)
   } catch (error) {
@@ -18,8 +18,7 @@ const createEntry = async (req: Request, res: Response) => {
     const entry = await Entry.create({
       ...body
     })
-    const entries = await Entry.find({})
-    return res.send(entries)
+    return res.send(entry)
   } catch (error) {
   console.log(error)
  }
