@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { User } from '../db/models'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import { generateToken } from '../helpers/authenticate'
 
 const login = async (req: Request, res: Response) => {
   try {
@@ -18,13 +18,12 @@ const login = async (req: Request, res: Response) => {
 
     const passDoesMatch = await bcrypt.compare(password, foundUser.password)
     if (!passDoesMatch) return res.send({ error: 'Password is incorrect.' })
-    else {
-      const token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
-      res.cookie('token', token, {
-        httpOnly: true
-      })
-      return res.status(200).send({ user: foundUser, redirect: `http://localhost:3000/journal/${foundUser._id}` })
-    }
+
+    return res
+      .cookie('accessToken', generateToken(foundUser, 'access'), { httpOnly: true })
+      .cookie('refreshToken', generateToken(foundUser, 'refresh'), { httpOnly: true })
+      .status(200)
+      .send({ user: foundUser, redirect: `http://localhost:3000/journal/${foundUser._id}` })
   } catch (error) {
     console.log(error)
   }
@@ -41,7 +40,10 @@ const register = async (req: Request, res: Response) => {
       username,
       password: hashedPassword
     })
-    return res.send(user)
+
+    return res
+      .status(201)
+      .send(user)
   } catch (error) {
     console.log(error)
   }
