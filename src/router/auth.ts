@@ -1,6 +1,5 @@
 import express from 'express'
 import controllers from '../controllers'
-import { verifyToken } from '../helpers/authenticate'
 
 const router = express.Router()
 
