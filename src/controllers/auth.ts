@@ -42,6 +42,8 @@ const register = async (req: Request, res: Response) => {
     })
 
     return res
+      .cookie('accessToken', generateToken(user, 'access'), { httpOnly: true })
+      .cookie('refreshToken', generateToken(user, 'refresh'), { httpOnly: true })
       .status(201)
       .send(user)
   } catch (error) {
