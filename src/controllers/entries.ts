@@ -4,9 +4,11 @@ import { Entry } from '../db/models'
 const entriesByUser = async (req: Request, res: Response) => {
   try {
     const entries = await Entry.find({
-      user: req.params.id
+      userId: req.params.id
     })
-    return res.send(entries)
+    return res
+      .status(200)
+      .send(entries)
   } catch (error) {
     console.log(error)
   }
@@ -14,11 +16,14 @@ const entriesByUser = async (req: Request, res: Response) => {
 
 const createEntry = async (req: Request, res: Response) => {
   try {
-    const body = await req.body
+    const { text, userId } = await req.body
     const entry = await Entry.create({
-      ...body
+      text,
+      userId
     })
-    return res.send(entry)
+    return res
+      .status(201)
+      .send(entry)
   } catch (error) {
   console.log(error)
  }
@@ -26,8 +31,11 @@ const createEntry = async (req: Request, res: Response) => {
 
 const deleteEntries = async (req: Request, res: Response) => {
   try {
-    const deleteEntries = await Entry.deleteMany({})
-    return res.send('all deleted')
+    const deletedEntries = await Entry.deleteMany({})
+    console.log(deletedEntries)
+    return res
+      .status(204)
+      .send('entries deleted')
   } catch (error) {
     console.log(error)
   }
