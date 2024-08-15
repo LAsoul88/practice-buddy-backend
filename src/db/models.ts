@@ -20,7 +20,7 @@ const userSchema = new Schema({
 const User = mongoose.model('users', userSchema)
 
 const entrySchema = new Schema({
-  user: ObjectId,
+  userId: ObjectId,
   text: { 
     type: String, 
     required: true 
