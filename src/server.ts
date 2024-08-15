@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import './db/connection'
 import routes from './router'
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3001
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cookieParser())
 app.use((req, res, next) => {
   console.log(req.url)
   next()
