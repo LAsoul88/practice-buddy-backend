@@ -12,11 +12,18 @@ dotenv.config()
 const app: Express = express()
 const port = process.env.PORT || 3001
 
+const corsConfig = {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  credentials: true
+}
+
 // Middleware
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(cors(corsConfig))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+
 app.use((req, res, next) => {
   console.log(req.url)
   next()
