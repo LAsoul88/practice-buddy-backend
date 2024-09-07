@@ -1,23 +1,32 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, CookieOptions } from 'express'
+import { Types } from 'mongoose'
 
 interface User {
 	email: string
 	username: string
 	password: string
+	_id: Types.ObjectId
+}
+
+export const cookieOptions: CookieOptions = {
+	httpOnly: true, 
+	secure: false, 
+	sameSite: 'none', 
+	maxAge: 1000 * 60
 }
 
 export const generateToken = (user: User, type: 'access' | 'refresh') => {
+	const { username, _id } = user
 	const payload: JwtPayload = {
-		...user,
+		username,
+		_id
 	}
 
 	let options = { expiresIn: 60 * 30 }
-	// if (type === 'access') options.expiresIn = 60 * 30
 	if (type === 'refresh') options.expiresIn = 60 * 60 * 24
 
 	const token = jwt.sign(payload, process.env.JWT_SECRET as string, options)
-	console.log(`${type} token created: `, token)
 	return token
 }
 
