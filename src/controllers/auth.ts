@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { User } from '../db/models'
 import bcrypt from 'bcrypt'
-import { generateToken } from '../helpers/authenticate'
+import { generateToken, cookieOptions } from '../helpers/authenticate'
 
 const login = async (req: Request, res: Response) => {
   try {
@@ -19,11 +19,14 @@ const login = async (req: Request, res: Response) => {
     const passDoesMatch = await bcrypt.compare(password, foundUser.password)
     if (!passDoesMatch) return res.send({ error: 'Password is incorrect.' })
 
+    const accessToken = generateToken(foundUser, 'access')
+    const refreshToken = generateToken(foundUser, 'refresh')
     return res
-      .cookie('accessToken', generateToken(foundUser, 'access'), { httpOnly: true })
-      .cookie('refreshToken', generateToken(foundUser, 'refresh'), { httpOnly: true })
+      .cookie('accessToken', accessToken, cookieOptions)
+      .cookie('refreshToken', refreshToken, cookieOptions)
+      .cookie('userSession', { user: { username: foundUser.username, _id: foundUser._id }}, cookieOptions)
       .status(200)
-      .send({ user: foundUser, redirect: `http://localhost:3000/journal/${foundUser._id}` })
+      .send({ user: { username: foundUser.username, _id: foundUser._id } })
   } catch (error) {
     console.log(error)
   }

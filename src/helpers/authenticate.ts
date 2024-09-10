@@ -13,7 +13,7 @@ export const cookieOptions: CookieOptions = {
 	httpOnly: true, 
 	secure: false, 
 	sameSite: 'none', 
-	maxAge: 1000 * 60
+	maxAge: 1000 * 60 * 60
 }
 
 export const generateToken = (user: User, type: 'access' | 'refresh') => {
