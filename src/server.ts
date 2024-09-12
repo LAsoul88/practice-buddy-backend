@@ -15,17 +15,19 @@ const port = process.env.PORT || 3001
 const corsConfig = {
   origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   credentials: true
 }
 
 // Middleware
 app.use(cors(corsConfig))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.use((req, res, next) => {
-  console.log(req.url)
+  console.log(req.method, req.url)
+  console.log('cookies: ', req.headers)
   next()
 })
 
