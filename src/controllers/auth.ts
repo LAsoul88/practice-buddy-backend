@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { User } from '../db/models'
 import bcrypt from 'bcrypt'
-import { generateToken, cookieOptions } from '../helpers/authenticate'
+import { generateToken } from '../helpers/authenticate'
 
 const login = async (req: Request, res: Response) => {
   try {
@@ -21,12 +21,10 @@ const login = async (req: Request, res: Response) => {
 
     const accessToken = generateToken(foundUser, 'access')
     const refreshToken = generateToken(foundUser, 'refresh')
+
     return res
-      .cookie('accessToken', accessToken, cookieOptions)
-      .cookie('refreshToken', refreshToken, cookieOptions)
-      .cookie('userSession', { user: { username: foundUser.username, _id: foundUser._id }}, cookieOptions)
       .status(200)
-      .send({ user: { username: foundUser.username, _id: foundUser._id } })
+      .send({ user: { username: foundUser.username, _id: foundUser._id }, accessToken, refreshToken })
   } catch (error) {
     console.log(error)
   }
@@ -44,11 +42,12 @@ const register = async (req: Request, res: Response) => {
       password: hashedPassword
     })
 
+    const accessToken = generateToken(user, 'access')
+    const refreshToken = generateToken(user, 'refresh')
+
     return res
-      .cookie('accessToken', generateToken(user, 'access'), { httpOnly: true })
-      .cookie('refreshToken', generateToken(user, 'refresh'), { httpOnly: true })
       .status(201)
-      .send(user)
+      .send({ user: { username: user.username, _id: user._id }, accessToken, refreshToken })
   } catch (error) {
     console.log(error)
   }

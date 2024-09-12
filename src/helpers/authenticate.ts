@@ -1,5 +1,5 @@
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { Request, Response, NextFunction, CookieOptions } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
 
 interface User {
@@ -7,14 +7,6 @@ interface User {
 	username: string
 	password: string
 	_id: Types.ObjectId
-}
-
-export const cookieOptions: CookieOptions = {
-	httpOnly: true, 
-	secure: process.env.NODE_ENV === 'production', 
-	sameSite: process.env.NODE_ENV === 'production' ? 'none': 'lax', 
-	maxAge: 1000 * 60 * 60,
-	path: '/'
 }
 
 export const generateToken = (user: User, type: 'access' | 'refresh') => {
