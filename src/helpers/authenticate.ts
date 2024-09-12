@@ -11,9 +11,10 @@ interface User {
 
 export const cookieOptions: CookieOptions = {
 	httpOnly: true, 
-	secure: false, 
-	sameSite: 'none', 
-	maxAge: 1000 * 60 * 60
+	secure: process.env.NODE_ENV === 'production', 
+	sameSite: process.env.NODE_ENV === 'production' ? 'none': 'lax', 
+	maxAge: 1000 * 60 * 60,
+	path: '/'
 }
 
 export const generateToken = (user: User, type: 'access' | 'refresh') => {
