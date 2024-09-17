@@ -29,6 +29,19 @@ const createEntry = async (req: Request, res: Response) => {
  }
 }
 
+const deleteEntry = async (req: Request, res: Response) => {
+  try {
+    const { _id } = await req.body
+    const deletedEntry = await Entry.deleteOne({ _id })
+
+    return res
+      .status(204)
+      .send('entry deleted')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const deleteEntries = async (req: Request, res: Response) => {
   try {
     const deletedEntries = await Entry.deleteMany({})
@@ -44,5 +57,6 @@ const deleteEntries = async (req: Request, res: Response) => {
 export default {
   entriesByUser,
   createEntry,
+  deleteEntry,
   deleteEntries
 }
