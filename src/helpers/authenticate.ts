@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
 
 interface User {
-	email: string
+	email?: string
 	username: string
-	password: string
+	password?: string
 	_id: Types.ObjectId
 }
 
@@ -26,7 +26,7 @@ export const generateToken = (user: User, type: 'access' | 'refresh') => {
 const verifyToken = (token: string) => {
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload
-		return { success: true, data: decoded, user: decoded.user }
+		return { success: true, data: decoded }
 	} catch (error) {
 		return { success: false, error }
 	}
@@ -51,12 +51,12 @@ export const authenticate = async (
 				.status(401)
 				.send({ error: 'No valid tokens present, login required.' })
 		}
-
-		const { user } = refreshResult
+		
+		const { username, _id } = Object.assign({}, refreshResult.data)
 		console.log('assigning new access token')
-		req.cookies['accessToken'] = generateToken(user, 'access')
+		req.cookies['accessToken'] = generateToken({ username, _id }, 'access')
 		console.log('assigning new refresh token')
-		req.cookies['refreshToken'] = generateToken(user, 'refresh')
+		req.cookies['refreshToken'] = generateToken({ username, _id }, 'refresh')
 		return next()
 	}
 	next()
