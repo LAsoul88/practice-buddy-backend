@@ -3,8 +3,9 @@ import { Entry } from '../db/models'
 
 const entriesByUser = async (req: Request, res: Response) => {
   try {
+    const { id } = req.params
     const entries = await Entry.find({
-      userId: req.params.id
+      userId: id
     })
     return res
       .status(200)
@@ -29,10 +30,28 @@ const createEntry = async (req: Request, res: Response) => {
  }
 }
 
+const updateEntry = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const { text } = await req.body
+    const updatedEntry = await Entry.updateOne({
+      _id: id
+    }, {
+      text
+    })
+
+    return res
+      .status(200)
+      .send(updatedEntry)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const deleteEntry = async (req: Request, res: Response) => {
   try {
-    const { _id } = await req.body
-    const deletedEntry = await Entry.deleteOne({ _id })
+    const { id } = req.params
+    const deletedEntry = await Entry.deleteOne({ _id: id })
 
     return res
       .status(204)
