@@ -76,6 +76,7 @@ const deleteEntries = async (req: Request, res: Response) => {
 export default {
   entriesByUser,
   createEntry,
+  updateEntry,
   deleteEntry,
   deleteEntries
 }
